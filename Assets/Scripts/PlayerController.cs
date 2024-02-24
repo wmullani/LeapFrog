@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(CharacterController))]
 public class PlayerController : MonoBehaviour
@@ -26,6 +27,10 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed = 90;
     public float gravity = -20f;
     public float jumpSpeed = 15;
+    public Text player1ScoreText;
+    public Text player2ScoreText;
+
+    public Text winText;
 
     void Awake()
     {
@@ -42,6 +47,7 @@ public class PlayerController : MonoBehaviour
             score1++;
             scoredOverPlayer1 = true;
             Debug.Log("Player 1 Score: " + score1);
+            player1ScoreText.text = "Player 1 Score: " + score1;
         }
     }
     else if (other.gameObject == player2 && moveVelocity2.y > 0 && !scoredOverPlayer2)
@@ -51,6 +57,7 @@ public class PlayerController : MonoBehaviour
             score2++;
             scoredOverPlayer2 = true;
             Debug.Log("Player 2 Score: " + score2);
+            player2ScoreText.text = "Player 2 Score: " + score2;
         }
     }
 }
@@ -71,6 +78,16 @@ public void IncrementScore(int value)
 
     void Update()
     {
+        if (score1 >= 5)
+{
+    winText.text = "Player 1 Wins!";
+    winText.gameObject.SetActive(true);
+}
+        else if (score2 >= 5)
+{
+    winText.text = "Player 2 Wins!";
+    winText.gameObject.SetActive(true);
+}
         float hInput1 = 0;
         float vInput1 = 0;
 

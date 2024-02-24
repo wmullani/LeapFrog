@@ -4,3 +4,5 @@ I had to consult copilot and iterate the actual script several times to get the 
 I attempted to make a portal game object that would teleport the player on collision, but after hours of revising, following tutorials and consulting copilot I just wasn't able to get it to work and had to scrap the idea.
 design tools: I finally settled on a change to goal and skill, adding a collectible that would automatically increment the player's score by 5, but is very difficult to reach due to the parkour required.
 These are the changes I made!
+
+UPDATE: I have now added a functional GUI to display scores, as well as win text in the middle of the screen that will display when one player reaches 5 points.
