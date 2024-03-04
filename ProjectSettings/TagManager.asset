@@ -6,6 +6,8 @@ TagManager:
   tags:
   - playerTag
   - Collectible
+  - Box
+  - Floor
   layers:
   - Default
   - TransparentFX

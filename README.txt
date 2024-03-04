@@ -6,3 +6,6 @@ design tools: I finally settled on a change to goal and skill, adding a collecti
 These are the changes I made!
 
 UPDATE: I have now added a functional GUI to display scores, as well as win text in the middle of the screen that will display when one player reaches 5 points.
+
+UPDATE: I have added manager systems to manage things such as the player and their inventory, as well as adding an inventory feature which allows the player to collect items which they can then equip (though this currently doesn't do anything). 
+Also I added a push force to the player and some free standing box stacks that the player can push over for fun, plus changed the collectibles from adding to the player's score to being collected into their inventory.

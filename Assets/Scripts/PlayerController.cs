@@ -32,6 +32,8 @@ public class PlayerController : MonoBehaviour
 
     public Text winText;
 
+    public float pushForce = 10.0f;
+
     void Awake()
     {
         characterController1 = player1.GetComponent<CharacterController>();
@@ -39,55 +41,67 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnTriggerEnter(Collider other)
-{
-    if (other.gameObject == player1 && moveVelocity1.y > 0 && !scoredOverPlayer1)
     {
-        if (player1.transform.position.y > player2.transform.position.y) // Player 1 is higher than player 2
+        if (other.gameObject == player1 && moveVelocity1.y > 0 && !scoredOverPlayer1)
         {
-            score1++;
-            scoredOverPlayer1 = true;
+            if (player1.transform.position.y > player2.transform.position.y) // Player 1 is higher than player 2
+            {
+                score1++;
+                scoredOverPlayer1 = true;
+                Debug.Log("Player 1 Score: " + score1);
+                player1ScoreText.text = "Player 1 Score: " + score1;
+            }
+        }
+        else if (other.gameObject == player2 && moveVelocity2.y > 0 && !scoredOverPlayer2)
+        {
+            if (player2.transform.position.y > player1.transform.position.y) // Player 2 is higher than player 1
+            {
+                score2++;
+                scoredOverPlayer2 = true;
+                Debug.Log("Player 2 Score: " + score2);
+                player2ScoreText.text = "Player 2 Score: " + score2;
+            }
+        }
+    }
+
+    public void IncrementScore(int value)
+    {
+        // Determine which player's score to increment based on the player's GameObject
+        if (gameObject == player1)
+        {
+            score1 += value;
             Debug.Log("Player 1 Score: " + score1);
-            player1ScoreText.text = "Player 1 Score: " + score1;
         }
-    }
-    else if (other.gameObject == player2 && moveVelocity2.y > 0 && !scoredOverPlayer2)
-    {
-        if (player2.transform.position.y > player1.transform.position.y) // Player 2 is higher than player 1
+        else if (gameObject == player2)
         {
-            score2++;
-            scoredOverPlayer2 = true;
+            score2 += value;
             Debug.Log("Player 2 Score: " + score2);
-            player2ScoreText.text = "Player 2 Score: " + score2;
         }
     }
-}
-public void IncrementScore(int value)
+
+    void OnControllerColliderHit(ControllerColliderHit hit)
 {
-    // Determine which player's score to increment based on the player's GameObject
-    if (gameObject == player1)
+    Rigidbody body = hit.collider.attachedRigidbody;
+    if (body != null && !body.isKinematic)
     {
-        score1 += value;
-        Debug.Log("Player 1 Score: " + score1);
+        body.velocity = hit.moveDirection * pushForce;
     }
-    else if (gameObject == player2)
-    {
-        score2 += value;
-        Debug.Log("Player 2 Score: " + score2);
-    }
-}
+} 
+
 
     void Update()
     {
         if (score1 >= 5)
-{
-    winText.text = "Player 1 Wins!";
-    winText.gameObject.SetActive(true);
-}
+        {
+            winText.text = "Player 1 Wins!";
+            winText.gameObject.SetActive(true);
+        }
         else if (score2 >= 5)
-{
-    winText.text = "Player 2 Wins!";
-    winText.gameObject.SetActive(true);
-}
+        {
+            winText.text = "Player 2 Wins!";
+            winText.gameObject.SetActive(true);
+        }
+
         float hInput1 = 0;
         float vInput1 = 0;
 
