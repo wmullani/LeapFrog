@@ -8,6 +8,8 @@ TagManager:
   - Collectible
   - Box
   - Floor
+  - Door
+  - Victory Pedestal
   layers:
   - Default
   - TransparentFX

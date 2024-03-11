@@ -3,74 +3,71 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class InventoryManager : MonoBehaviour, IGameManager {
-	public ManagerStatus status {get; private set;}
+    public ManagerStatus status { get; private set; }
 
-	private Dictionary<string, int> items;
-	public string equippedItem {get; private set;}
+    private Dictionary<string, Dictionary<string, int>> playerInventories;
 
-	public void Startup() {
-		Debug.Log("Inventory manager starting...");
+    public void Startup() {
+        status = ManagerStatus.Started;
+        playerInventories = new Dictionary<string, Dictionary<string, int>>();
+    }
 
-		items = new Dictionary<string, int>();
+    public void AddItem(string playerName, string itemName) {
+        if (!playerInventories.ContainsKey(playerName)) {
+            playerInventories[playerName] = new Dictionary<string, int>();
+        }
 
-		// any long-running startup tasks go here, and set status to 'Initializing' until those tasks are complete
-		status = ManagerStatus.Started;
-	}
+        if (playerInventories[playerName].ContainsKey(itemName)) {
+            playerInventories[playerName][itemName]++;
+        } else {
+            playerInventories[playerName][itemName] = 1;
+        }
 
-	private void DisplayItems() {
-		string itemDisplay = "Items: ";
-		foreach (KeyValuePair<string, int> item in items) {
-			itemDisplay += item.Key + "(" + item.Value + ") ";
-		}
-		Debug.Log(itemDisplay);
-	}
+        DisplayItems(playerName);
+    }
 
-	public void AddItem(string name) {
-		if (items.ContainsKey(name)) {
-			items[name] += 1;
-		} else {
-			items[name] = 1;
-		}
+    public int GetItemCount(string playerName, string itemName) {
+        if (playerInventories.ContainsKey(playerName) && playerInventories[playerName].ContainsKey(itemName)) {
+            return playerInventories[playerName][itemName];
+        }
 
-		DisplayItems();
-	}
-	
-	public bool ConsumeItem(string name) {
-		if (items.ContainsKey(name)) {
-			items[name]--;
-			if (items[name] == 0) {
-				items.Remove(name);
-			}
-		} else {
-			Debug.Log($"Cannot consume {name}");
-			return false;
-		}
-		
-		DisplayItems();
-		return true;
-	}
+        return 0;
+    }
 
-	public List<string> GetItemList() {
-		List<string> list = new List<string>(items.Keys);
-		return list;
-	}
+    public bool ConsumeItem(string playerName, string itemName) {
+        if (playerInventories.ContainsKey(playerName) && playerInventories[playerName].ContainsKey(itemName)) {
+            playerInventories[playerName][itemName]--;
+            if (playerInventories[playerName][itemName] == 0) {
+                playerInventories[playerName].Remove(itemName);
+            }
+            DisplayItems(playerName);
+            return true;
+        }
 
-	public int GetItemCount(string name) {
-		if (items.ContainsKey(name)) {
-			return items[name];
-		}
-		return 0;
-	}
+        Debug.Log($"Cannot consume {itemName}");
+        return false;
+    }
 
-	public bool EquipItem(string name) {
-		if (items.ContainsKey(name) && equippedItem != name) {
-			equippedItem = name;
-			Debug.Log($"Equipped {name}");
-			return true;
-		}
+    public List<string> GetItemList(string playerName) {
+        if (playerInventories.ContainsKey(playerName)) {
+            return new List<string>(playerInventories[playerName].Keys);
+        }
+        return new List<string>();
+    }
 
-		equippedItem = null;
-		Debug.Log("Unequipped");
-		return false;
-	}
+    /*public bool EquipItem(string playerName, string itemName) {
+        if (playerInventories.ContainsKey(playerName) && playerInventories[playerName].ContainsKey(itemName)) {
+            // Implement item equipping logic here
+            return true;
+        }
+        return false;
+    }*/
+
+    private void DisplayItems(string playerName) {
+        string itemDisplay = $"{playerName}'s Items: ";
+        foreach (KeyValuePair<string, int> item in playerInventories[playerName]) {
+            itemDisplay += item.Key + "(" + item.Value + ") ";
+        }
+        Debug.Log(itemDisplay);
+    }
 }

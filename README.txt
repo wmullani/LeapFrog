@@ -9,3 +9,5 @@ UPDATE: I have now added a functional GUI to display scores, as well as win text
 
 UPDATE: I have added manager systems to manage things such as the player and their inventory, as well as adding an inventory feature which allows the player to collect items which they can then equip (though this currently doesn't do anything). 
 Also I added a push force to the player and some free standing box stacks that the player can push over for fun, plus changed the collectibles from adding to the player's score to being collected into their inventory.
+
+UPDATE: The game's objective, rather than jumping over each other to earn points, is to be the first to enter the yellow floorspace after collecting 5 collectibles. In other words, player race to collect collectibles which are scattered across the playing field and added to that player's inventory on contact. Once the player has 5 in their inventory, they will win by touching the yellow area. Also, the ability to jump is not currently present as it is no longer core to the mechanics.

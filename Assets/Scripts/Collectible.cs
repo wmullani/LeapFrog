@@ -5,12 +5,22 @@ using UnityEngine;
 public class Collectible : MonoBehaviour
 {[SerializeField] string itemName;
 
-	void OnTriggerEnter(Collider other) {
-    if (Managers.Inventory != null) {
-        Managers.Inventory.AddItem(itemName);
-        Destroy(this.gameObject);
-    } else {
-        Debug.LogError("Managers.Inventory is null");
+private InventoryManager inventoryManager;
+
+void Awake()
+{
+    inventoryManager = FindObjectOfType<InventoryManager>();
+    if (inventoryManager == null)
+    {
+        Debug.LogError("InventoryManager not found in the scene.");
+    }
+}
+	void OnTriggerEnter(Collider other)
+{
+    if (other.gameObject.CompareTag("Player"))
+    {
+        inventoryManager.AddItem(other.gameObject.name, "Collectible");
+        Destroy(gameObject);
     }
 }
 }
